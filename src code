@@ -1,0 +1,106 @@
+//Joseph Tyler Faircloth
+//2-4-2022
+//Algorithm design and analysis
+//Programming assignment 1
+// program: takes N values and sorts them using a divide and conquer algorithm.
+//Provides back a min and max value as well as number of key comparisons.
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class Merge_Sort_Algorithm {
+
+	public static void main(String[] args) {
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter an integer value from 1 to 10,000"
+							+ " for the size of your array:");
+		
+		int UserArrayValue = scanner.nextInt();
+		
+		int[] randomArray = randomNumberArray(UserArrayValue);
+		
+		Pair minmax = getMinMax(randomArray, 0, randomArray.length - 1);
+		System.out.printf("Minimum element in the array: %d%n"
+						 + "Maximum element in the array: %d%n"
+						 + "Key Comparisons Made: %d%n"
+						 ,minmax.min , minmax.max, totalComparisons);
+		//printArray(randomArray);
+	}
+
+static int totalComparisons = 0;
+    
+    static class Pair { 
+                int min; 
+                int max; 
+        } 
+
+        static Pair getMinMax(int arr[], int low, int high) { 
+                Pair minmax = new Pair(); 
+                Pair mml = new Pair(); 
+                Pair mmr = new Pair(); 
+                int mid; 
+
+                /* If there is only on element */
+                if (low == high) { 
+                        minmax.max = arr[low]; 
+                        minmax.min = arr[low]; 
+                        return minmax; 
+                } 
+
+                /* If there are two elements */
+                if (high == low + 1) { 
+                    totalComparisons++;
+                        if (arr[low] > arr[high]) { 
+                                minmax.max = arr[low]; 
+                                minmax.min = arr[high]; 
+                        } else { 
+                                minmax.max = arr[high]; 
+                                minmax.min = arr[low]; 
+                        } 
+                        return minmax; 
+                } 
+
+                /* If there are more than 2 elements */
+                mid = (low + high) / 2; 
+                mml = getMinMax(arr, low, mid); 
+                mmr = getMinMax(arr, mid + 1, high); 
+
+                /* compare minimums of two parts*/
+                if (mml.min < mmr.min) { 
+                        minmax.min = mml.min; 
+                } else { 
+                        minmax.min = mmr.min; 
+                } 
+        totalComparisons++;
+        
+                /* compare maximums of two parts*/
+                if (mml.max > mmr.max) { 
+                        minmax.max = mml.max; 
+                } else { 
+                        minmax.max = mmr.max; 
+                } 
+        totalComparisons++;
+        
+                return minmax; 
+        } 
+	
+		
+	 static void printArray(int arr[])
+	    {
+	        int n = arr.length;
+	        for (int i = 0; i < n; ++i)
+	            System.out.print(arr[i] + " ");
+	        System.out.println();
+	    }
+
+	public static int[] randomNumberArray (int arraySize) {
+		Random random = new Random();
+		int upperbound = 10000; // highest value possible in array
+		int lowerbound = 1;     // lowest value possible in array
+		int[] array = new int[arraySize];
+		for (int i = 0; i < array.length; i++) {
+			array[i] = random.nextInt((upperbound - lowerbound) + lowerbound) + lowerbound;;		
+		}
+		return array;
+	}
+}
